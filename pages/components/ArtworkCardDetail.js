@@ -7,9 +7,9 @@ import { useAtom } from 'jotai';
 import { favouritesAtom } from '@/store';
 
 export default function ArtworkCardDetail({ objectID }) {
-  const [showAdded, setShowAdded] = useState(true);
+  
   const [favouritesList, setFavouritesList] = useAtom(favouritesAtom);
-
+  const [showAdded, setShowAdded] = useState(favouritesList.includes(objectID));
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(objectID ? `https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}` : null, fetcher);
@@ -17,7 +17,7 @@ export default function ArtworkCardDetail({ objectID }) {
   const favouritesClicked = () => {
     if (showAdded) {
       // Remove objectID from favouritesList
-      setFavouritesList(current => current.filter(fav => fav !== objectID));
+      setFavouritesList(current => current.filter(fav => fav != objectID));
     } else {
       // Add objectID to favouritesList
       setFavouritesList(current => [...current, objectID]);
@@ -62,13 +62,13 @@ export default function ArtworkCardDetail({ objectID }) {
           {artistWikidata_URL && (
             <a href={artistWikidata_URL} target="_blank" rel="noreferrer">wiki</a>
           )}
-        </Card.Text>
+        </Card.Text>&nbsp;
         <Button
           variant={showAdded ? "primary" : "outline-primary"}
           onClick={favouritesClicked}
         >
-          {showAdded ? "+ Favourite (added)" : "+ Favourite"}
-        </Button>
+          {showAdded ? "+ Favourite(added)" : "+ Favourite"}
+        </Button>&nbsp; 
         <Link href={`/artwork/${objectID}`} passHref>
           <Button variant="primary">{objectID}</Button>
         </Link>

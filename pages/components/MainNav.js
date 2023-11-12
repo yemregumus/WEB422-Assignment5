@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { Navbar, Nav, NavDropdown, Form, Button, FormControl, Container } from 'react-bootstrap';
+import { Navbar, Nav, NavDropdown, Dropdown, Form, Button, FormControl, Container } from 'react-bootstrap';
 import { useRouter } from 'next/router';
 import { useAtom } from "jotai"
 import { searchHistoryAtom } from "@/store"
@@ -9,6 +9,11 @@ export default function MainNav() {
   const router = useRouter();
   const [isExpanded, setIsExpanded] = useState(false);
   const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom)
+  const [isDropdownHovered, setDropdownHovered] = useState(false);
+
+  const closeDropdown = () => {
+    setDropdownHovered(false);
+  };
 
   const submitForm = (e) => {
     e.preventDefault();
@@ -19,17 +24,14 @@ export default function MainNav() {
     
     router.push(`/artwork?title=true&q=${searchField}`);
     setSearchHistory((current) => [...current, queryString])
-    // Close the navbar after submitting the form
     setIsExpanded(false);
   };
   
   const toggleNavbar = () => {
-    // Toggle the expanded state of the navbar
     setIsExpanded(!isExpanded);
   };
 
   const closeNavbar = () => {
-    // Close the navbar when a link is clicked
     setIsExpanded(false);
   };
 
@@ -45,8 +47,8 @@ export default function MainNav() {
           <Navbar.Toggle aria-controls="navbarScroll" onClick={toggleNavbar} />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll onClick={closeNavbar}>
-              <Nav.Link href="/" legacyBehavior passHref>Home</Nav.Link>
-              <Nav.Link href="/search" legacyBehavior passHref>Advanced Search</Nav.Link>
+            <Nav.Link href="/" legacyBehavior passHref active={router.pathname === "/"}>Home</Nav.Link>
+            <Nav.Link href="/search" legacyBehavior passHref active={router.pathname === "/search"}>Advanced Search</Nav.Link>
             </Nav>
             <Form className="d-flex" onSubmit={submitForm}>
               <FormControl
@@ -58,27 +60,31 @@ export default function MainNav() {
               <Button variant="success" type="submit">Search</Button>
             </Form>
             &nbsp;
-            <Nav>
-              <NavDropdown title="User Name" id="basic-nav-dropdown">
+            <Dropdown
+              onMouseEnter={() => setDropdownHovered(true)}
+              onMouseLeave={() => setDropdownHovered(false)}
+            >
+              <Dropdown.Toggle variant="success" id="dropdown-basic">User Name</Dropdown.Toggle>
+
+              <Dropdown.Menu show={isDropdownHovered}>
                 <Link href="/favourites" passHref legacyBehavior>
-                  {/*legacyBehavior is a must add to avoid double <a> which occurs errors*/}
-                  <NavDropdown.Item
+                  <Dropdown.Item
                     active={router.pathname === "/favourites"}
-                    onClick={() => setIsExpanded(false)}
+                    onClick={closeDropdown}
                   >
                     Favourite
-                  </NavDropdown.Item>
+                  </Dropdown.Item>
                 </Link>
                 <Link href="/history" passHref legacyBehavior>
-                  <NavDropdown.Item
+                  <Dropdown.Item
                     active={router.pathname === "/history"}
-                    onClick={() => setIsExpanded(false)}
+                    onClick={closeDropdown}
                   >
                     Search History
-                  </NavDropdown.Item>
+                  </Dropdown.Item>
                 </Link>
-              </NavDropdown>
-            </Nav>
+              </Dropdown.Menu>
+            </Dropdown>
           </Navbar.Collapse>
         </Container>
       </Navbar>

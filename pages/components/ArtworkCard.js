@@ -5,7 +5,7 @@ import { Card, Button } from 'react-bootstrap';
 import Link from 'next/link';
 
 export default function ArtworkCard({ objectID }){
-
+  
   const fetcher = (url) => fetch(url).then((res) => res.json());
 
   const { data, error } = useSWR(`https://collectionapi.metmuseum.org/public/collection/v1/objects/${objectID}`, fetcher);
@@ -31,7 +31,7 @@ export default function ArtworkCard({ objectID }){
   const artworkDate = objectDate || 'N/A';
   const artworkClassification = classification || 'N/A';
   const artworkMedium = medium || 'N/A';
-
+  console.log(objectID);
   return (
     <Card style={{ width: '18rem' }}>
       <Card.Img src={imageUrl} alt={artworkTitle} />
