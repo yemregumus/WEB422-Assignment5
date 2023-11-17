@@ -1,11 +1,10 @@
-/* eslint-disable jsx-a11y/alt-text */
 /*********************************************************************************
-*  WEB422 – Assignment 4
+*  WEB422 – Assignment 5
 *  I declare that this assignment is my own work in accordance with Seneca Academic Policy.  
 *  No part of this assignment has been copied manually or electronically from any other source
 *  (including web sites) or distributed to other students.
 * 
-*  Name: Yunus Emre Gumus Student ID: 150331197 Date:26/10/2023
+*  Name: Yunus Emre Gumus Student ID: 150331197 Date:17/11/2023
 ********************************************************************************/ 
 
 import React from 'react';
